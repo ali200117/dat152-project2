@@ -39,17 +39,32 @@ public class UserService {
 	}
 	
 	
-	// TODO public User saveUser(User user)
+	// SAVE USER
 	public User saveUser(User user) {
 		
-		return null;
+		user = userRepository.save(user);
+		return user;
 	}
 	
-	// TODO public void deleteUser(Long id) throws UserNotFoundException 
+	// DELETE USER
+	public void deleteUser(Long id) throws UserNotFoundException {
+		User user = userRepository.findById(id)
+		.orElseThrow(()-> new UserNotFoundException("User with id: " + id + "not found"));
+		userRepository.delete(user);
+	}
 	
-	// TODO public User updateUser(User user, Long id)
+	// UPDATE EXISTING USER
+	public User updateUser(User user, Long id) throws UserNotFoundException {
+		User existingUser = userRepository.findById(id).orElseThrow(()-> new UserNotFoundException("User with id: " + id + " not found"));
+		existingUser.setFirstname(user.getFirstname());
+		existingUser.setLastname(user.getLastname());
+		
+		return userRepository.save(existingUser);
+
+	}
 	
-	// TODO public Set<Order> getUserOrders(Long userid) 
+	// TODO public Set<Order> getUserOrders(Long userid)
+	 
 	
 	// TODO public Order getUserOrder(Long userid, Long oid)
 	
