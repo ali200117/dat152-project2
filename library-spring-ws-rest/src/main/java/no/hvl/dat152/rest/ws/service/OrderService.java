@@ -39,12 +39,34 @@ public class OrderService {
 		return order;
 	}
 	
-	// TODO public void deleteOrder(Long id)
-	
-	// TODO public List<Order> findAllOrders()
-	
-	// TODO public List<Order> findByExpiryDate(LocalDate expiry, Pageable page)
-	
-	// TODO public Order updateOrder(Order order, Long id)
+	// Slett ordre (kaster hvis den mangler)
+	public void deleteOrder(Long id) throws OrderNotFoundException {
+
+		Order order = findOrder(id);
+		orderRepository.delete(order);
+	}
+
+	// Hent alle ordrer
+	public List<Order> findAllOrders() {
+
+		return orderRepository.findAll();
+	}
+
+	// Ordrer som utløper før dato, paginert
+	public List<Order> findByExpiryDate(LocalDate expiry, Pageable page) {
+
+		Page<Order> orders = orderRepository.findByExpiryBefore(expiry, page);
+
+		return orders.getContent();
+	}
+
+	// Oppdater utløpsdato på eksisterende ordre
+	public Order updateOrder(Order order, Long id) throws OrderNotFoundException {
+
+		Order existingOrder = findOrder(id);
+		existingOrder.setExpiry(order.getExpiry());
+
+		return orderRepository.save(existingOrder);
+	}
 
 }
