@@ -49,7 +49,6 @@ public class BookService {
 		return book;
 	}
 	
-	// TODO public Book updateBook(Book book, String isbn)
 
 	public Book updateBook(Book book, String isbn) throws BookNotFoundException{
 
@@ -62,7 +61,6 @@ public class BookService {
 
 	}
 	
-	// TODO public List<Book> findAllPaginate(Pageable page)
 	public List<Book> findAllPaginate(Pageable page){
 
 		List<Book> bookList = new ArrayList<>();
@@ -77,7 +75,6 @@ public class BookService {
 
 	}
 	
-	// TODO public Set<Author> findAuthorsOfBookByISBN(String isbn)
 
 	public Set<Author> findAuthorsOfBookByISBN(String isbn) throws BookNotFoundException{
 
@@ -87,7 +84,6 @@ public class BookService {
 
 	}
 
-	// TODO public void deleteById(long id)
 	public void deleteById(long id) throws BookNotFoundException{
 
 		Book existingBook = bookRepository.findById(id)
@@ -97,7 +93,6 @@ public class BookService {
 	}
 
 	
-	// TODO public void deleteByISBN(String isbn) 
 	public void deleteByISBN(String isbn) throws BookNotFoundException{
 
 		Book existingBook = findByISBN(isbn);
