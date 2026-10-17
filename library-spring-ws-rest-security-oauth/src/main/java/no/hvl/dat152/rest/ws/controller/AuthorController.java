@@ -30,7 +30,6 @@ import no.hvl.dat152.rest.ws.service.AuthorService;
 @RequestMapping("/elibrary/api/v1")
 public class AuthorController {
 
-	// TODO authority annotation
 
 
 	
@@ -39,6 +38,7 @@ public class AuthorController {
     private AuthorService authorService;
 
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/authors")
     public List<Author> getAllAuthors()  {
 
@@ -48,6 +48,7 @@ public class AuthorController {
 
 	
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/authors/{id}")
     public Author getAuthor (@PathVariable int id) throws AuthorNotFoundException{
 
@@ -56,6 +57,7 @@ public class AuthorController {
     }
 	
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/authors/{id}/books")
     public Set<Book> getBooksByAuthorId(@PathVariable int id) throws AuthorNotFoundException{
 
@@ -64,6 +66,7 @@ public class AuthorController {
     }
 	
 	// TODO - createAuthor (@Mappings, URI, and method)
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/authors")
     public ResponseEntity<Author> createAuthor (@RequestBody Author author){
 
@@ -74,6 +77,7 @@ public class AuthorController {
     }
 	
 	// TODO - updateAuthor (@Mappings, URI, and method)
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/authors/{id}")
     public ResponseEntity<Author> updateAuthor (@RequestBody Author author, @PathVariable int id) throws AuthorNotFoundException{
 

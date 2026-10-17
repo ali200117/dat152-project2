@@ -37,12 +37,12 @@ import no.hvl.dat152.rest.ws.service.BookService;
 @RequestMapping("/elibrary/api/v1")
 public class BookController {
 
-	// TODO authority annotation
 
 
 	@Autowired
 	private BookService bookService;
 	
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/books")
 	public ResponseEntity<Object> getAllBooks(){
 		
@@ -54,6 +54,7 @@ public class BookController {
 		return new ResponseEntity<>(books, HttpStatus.OK);		
 	}
 	
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/books/{isbn}")
 	public ResponseEntity<Object> getBook(@PathVariable String isbn) throws BookNotFoundException{
 		
@@ -63,6 +64,7 @@ public class BookController {
 				
 	}
 	
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@PostMapping("/books")
 	public ResponseEntity<Book> createBook(@RequestBody Book book){
 		
@@ -72,6 +74,7 @@ public class BookController {
 	}
 
 
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/books/{isbn}/authors")
 	public Set<Author> getAuthorsOfBookByISBN (@PathVariable String isbn) throws BookNotFoundException{
 
@@ -83,6 +86,7 @@ public class BookController {
 
 	
 
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@PutMapping("/books/{isbn}")
 	public ResponseEntity<Book> updateBookByISBN (@PathVariable String isbn, @RequestBody Book book) throws BookNotFoundException{
 
@@ -95,6 +99,7 @@ public class BookController {
 
 	
 
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@DeleteMapping("/books/{isbn}")
 	public ResponseEntity<Void> deleteBookByISBN (@PathVariable String isbn) throws BookNotFoundException{
 

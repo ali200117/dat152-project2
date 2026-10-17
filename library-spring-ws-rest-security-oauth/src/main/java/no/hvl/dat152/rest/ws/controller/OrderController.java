@@ -39,13 +39,13 @@ import no.hvl.dat152.rest.ws.service.OrderService;
 @RequestMapping("/elibrary/api/v1")
 public class OrderController {
 
-	// TODO authority annotation
 
 
 	@Autowired
 	private OrderService orderService;
 
 	// Alle ordrer, valgfritt filter på utløpsdato + paginering
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/orders")
 	public ResponseEntity<Object> getAllBorrowOrders(
 			@RequestParam(required = false) String expiry,
@@ -73,6 +73,7 @@ public class OrderController {
 	}
 
 	// Hent én ordre, med HATEOAS-lenker
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/orders/{id}")
 	public ResponseEntity<Object> getBorrowOrder(@PathVariable Long id) throws OrderNotFoundException {
 
@@ -89,6 +90,7 @@ public class OrderController {
 	}
 
 	// Oppdater ordre
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@PutMapping("/orders/{id}")
 	public ResponseEntity<Object> updateOrder(@PathVariable Long id, @RequestBody Order order)
 			throws OrderNotFoundException {
@@ -99,6 +101,7 @@ public class OrderController {
 	}
 
 	// Slett ordre
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@DeleteMapping("/orders/{id}")
 	public ResponseEntity<Object> deleteBookOrder(@PathVariable Long id) throws OrderNotFoundException {
 

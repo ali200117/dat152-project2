@@ -35,12 +35,12 @@ import no.hvl.dat152.rest.ws.service.UserService;
 @RequestMapping("/elibrary/api/v1")
 public class UserController {
 
-	// TODO authority annotation
 
 
 	@Autowired
 	private UserService userService;
 	
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/users")
 	public ResponseEntity<Object> getUsers(){
 		
@@ -53,6 +53,7 @@ public class UserController {
 			return new ResponseEntity<>(users, HttpStatus.OK);
 	}
 	
+	@PreAuthorize("hasAuthority('ADMIN') or authentication.details.userid == #id")
 	@GetMapping(value = "/users/{id}")
 	public ResponseEntity<Object> getUser(@PathVariable Long id) throws UserNotFoundException, OrderNotFoundException{
 		
@@ -63,14 +64,16 @@ public class UserController {
 	}
 	
 	// TODO - createUser (@Mappings, URI=/users, and method)
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@PostMapping(value = "/users")
 	public ResponseEntity<Object> createUser(@RequestBody User user){
 
 		User newUser = userService.saveUser(user);
-		return new ResponseEntity<>(user, HttpStatus.OK);
+		return new ResponseEntity<>(newUser, HttpStatus.CREATED);
 	}
 
 	// UPDATE USER
+	@PreAuthorize("hasAuthority('ADMIN') or authentication.details.userid == #id")
 	@PutMapping(value = "/users/{id}")
 	public ResponseEntity<Object> updateUser(@PathVariable Long id, @RequestBody User user) throws UserNotFoundException{
 
@@ -79,6 +82,7 @@ public class UserController {
 	}
 	
 	// TODO - deleteUser (@Mappings, URI, and method)
+	@PreAuthorize("hasAuthority('ADMIN') or authentication.details.userid == #id")
 	@DeleteMapping(value = "/users/{id}")
 	public ResponseEntity<Object> deleteUser(@PathVariable Long id) throws UserNotFoundException{
 		userService.deleteUser(id);
@@ -86,6 +90,7 @@ public class UserController {
 
 	}
 	// Hent alle ordrer til én bruker
+	@PreAuthorize("hasAuthority('ADMIN') or authentication.details.userid == #id")
 	@GetMapping(value = "/users/{id}/orders")
 	public ResponseEntity<Object> getUserOrders(@PathVariable Long id) throws UserNotFoundException {
 
@@ -95,6 +100,7 @@ public class UserController {
 	}
 
 	// Hent én bestemt ordre til brukeren
+	@PreAuthorize("hasAuthority('ADMIN') or authentication.details.userid == #uid")
 	@GetMapping(value = "/users/{uid}/orders/{oid}")
 	public ResponseEntity<Object> getUserOrder(@PathVariable Long uid, @PathVariable Long oid)
 			throws UserNotFoundException, OrderNotFoundException {
@@ -105,6 +111,7 @@ public class UserController {
 	}
 
 	// Slett én ordre fra brukeren
+	@PreAuthorize("hasAuthority('ADMIN') or authentication.details.userid == #uid")
 	@DeleteMapping(value = "/users/{uid}/orders/{oid}")
 	public ResponseEntity<Object> deleteUserOrder(@PathVariable Long uid, @PathVariable Long oid)
 			throws UserNotFoundException, OrderNotFoundException {
@@ -115,6 +122,7 @@ public class UserController {
 	}
 
 	// Opprett ordre for bruker, med HATEOAS
+	@PreAuthorize("hasAuthority('ADMIN') or authentication.details.userid == #id")
 	@PostMapping(value = "/users/{id}/orders")
 	public ResponseEntity<Object> createUserOrder(@PathVariable Long id, @RequestBody Order order)
 			throws UserNotFoundException, OrderNotFoundException {

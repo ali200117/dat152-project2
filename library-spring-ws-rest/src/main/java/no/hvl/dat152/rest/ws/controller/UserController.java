@@ -62,7 +62,7 @@ public class UserController {
 	public ResponseEntity<Object> createUser(@RequestBody User user){
 
 		User newUser = userService.saveUser(user);
-		return new ResponseEntity<>(user, HttpStatus.OK);
+		return new ResponseEntity<>(newUser, HttpStatus.CREATED);
 	}
 
 	// UPDATE USER
