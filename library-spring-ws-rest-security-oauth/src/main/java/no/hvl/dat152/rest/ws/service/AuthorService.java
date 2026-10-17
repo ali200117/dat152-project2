@@ -25,9 +25,9 @@ public class AuthorService {
 	private AuthorRepository authorRepository;
 		
 	
-	public Author findById(int id) throws AuthorNotFoundException {
-		
-		Author author = authorRepository.findById(id)
+	public Author findById(long id) throws AuthorNotFoundException {
+
+		Author author = authorRepository.findById((int) id)
 				.orElseThrow(()-> new AuthorNotFoundException("Author with the id: "+id+ "not found!"));
 		
 		return author;
