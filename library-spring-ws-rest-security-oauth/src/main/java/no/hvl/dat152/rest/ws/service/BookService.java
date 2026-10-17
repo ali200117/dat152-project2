@@ -3,6 +3,7 @@
  */
 package no.hvl.dat152.rest.ws.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -23,13 +24,81 @@ import no.hvl.dat152.rest.ws.repository.BookRepository;
 @Service
 public class BookService {
 
-	// TODO copy your solutions from previous tasks!
+	@Autowired
+	private BookRepository bookRepository;
+	
 	
 	public Book saveBook(Book book) {
 		
-		// TODO
+		return bookRepository.save(book);
 		
-		return null;
+	}
+	
+	public List<Book> findAll(){
 		
+		return (List<Book>) bookRepository.findAll();
+		
+	}
+	
+	
+	public Book findByISBN(String isbn) throws BookNotFoundException {
+		
+		Book book = bookRepository.findByIsbn(isbn)
+				.orElseThrow(() -> new BookNotFoundException("Book with isbn = "+isbn+" not found!"));
+		
+		return book;
+	}
+	
+
+	public Book updateBook(Book book, String isbn) throws BookNotFoundException{
+
+		Book existingBook = findByISBN(isbn);
+
+		existingBook.setAuthors(book.getAuthors());
+		existingBook.setTitle(book.getTitle());
+
+		return bookRepository.save(existingBook);
+
+	}
+	
+	public List<Book> findAllPaginate(Pageable page){
+
+		List<Book> bookList = new ArrayList<>();
+
+		for (Book book : bookRepository.findAll(page)){
+			bookList.add(book);
+		}
+
+		return bookList;
+
+
+
+	}
+	
+
+	public Set<Author> findAuthorsOfBookByISBN(String isbn) throws BookNotFoundException{
+
+		Book existingBook = findByISBN(isbn);
+
+		return existingBook.getAuthors();
+
+	}
+
+	public void deleteById(long id) throws BookNotFoundException{
+
+		Book existingBook = bookRepository.findById(id)
+				.orElseThrow(()-> new BookNotFoundException("Book with id: " + id + " does not exist"));
+
+		bookRepository.delete(existingBook);
+	}
+
+	
+	public void deleteByISBN(String isbn) throws BookNotFoundException{
+
+		Book existingBook = findByISBN(isbn);
+
+		bookRepository.delete(existingBook);
+
+
 	}
 }
